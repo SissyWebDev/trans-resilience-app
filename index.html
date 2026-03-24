@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- PWA essentials -->
+  <meta name="theme-color" content="#0f172a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Trans Resilience" />
+  <link rel="manifest" href="manifest.json" />
+
+  <!-- Home screen icons (we'll add these next) -->
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+
+  <title>Trans Resilience</title>
+
+  <style>
+    /* ── Reset & base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #0f172a;   /* deep navy */
+      --surface:  #1e293b;   /* card surface */
+      --border:   #334155;   /* subtle divider */
+      --accent:   #818cf8;   /* soft indigo */
+      --text:     #f1f5f9;   /* near-white */
+      --muted:    #94a3b8;   /* secondary text */
+      --urgent:   #f87171;   /* red for urgent */
+      --action:   #34d399;   /* green for action */
+      --update:   #60a5fa;   /* blue for update */
+      --resource: #fbbf24;   /* amber for resource */
+      --radius:   12px;
+      --font:     'DM Sans', system-ui, sans-serif;
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      /* Safe area insets: handles iPhone notch / Dynamic Island */
+      padding: env(safe-area-inset-top) env(safe-area-inset-right)
+               env(safe-area-inset-bottom) env(safe-area-inset-left);
+    }
+
+    /* ── Header ── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 20px 20px 0;
+    }
+
+    .wordmark {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: 22px;
+      letter-spacing: -0.3px;
+      color: var(--text);
+    }
+
+    .tagline {
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-top: 2px;
+      margin-bottom: 14px;
+    }
+
+    /* ── Tab bar ── */
+    .tabs {
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding-bottom: 0;
+    }
+    .tabs::-webkit-scrollbar { display: none; }
+
+    .tab {
+      flex-shrink: 0;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--muted);
+      background: none;
+      border: none;
+      padding: 8px 14px;
+      border-radius: var(--radius) var(--radius) 0 0;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: color 0.15s, border-color 0.15s;
+    }
+
+    .tab.active {
+      color: var(--accent);
+      border-bottom: 2px solid var(--accent);
+    }
+
+    /* ── Feed ── */
+    main {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* ── Campaign card ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      cursor: pointer;
+      transition: border-color 0.15s;
+    }
+    .card:hover { border-color: var(--accent); }
+
+    .card-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .badge {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 20px;
+    }
+
+    .badge-urgent   { background: rgba(248,113,113,0.15); color: var(--urgent); }
+    .badge-action   { background: rgba(52,211,153,0.15);  color: var(--action); }
+    .badge-update   { background: rgba(96,165,250,0.15);  color: var(--update); }
+    .badge-resource { background: rgba(251,191,36,0.15);  color: var(--resource); }
+
+    .date {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .card-title {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: 17px;
+      line-height: 1.35;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .card-body {
+      font-size: 14px;
+      line-height: 1.65;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    .card-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .card-cta::after { content: '→'; }
+
+    /* ── Empty state ── */
+    .empty {
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+      padding: 48px 24px;
+    }
+
+    /* ── Google Fonts ── */
+    @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&display=swap');
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <p class="wordmark">Trans Resilience</p>
+    <p class="tagline">Campaigns · Updates · Action</p>
+    <div class="tabs" role="tablist">
+      <button class="tab active" onclick="filterFeed('all', this)"     role="tab">All</button>
+      <button class="tab"        onclick="filterFeed('urgent', this)"  role="tab">Urgent</button>
+      <button class="tab"        onclick="filterFeed('action', this)"  role="tab">Take action</button>
+      <button class="tab"        onclick="filterFeed('update', this)"  role="tab">Updates</button>
+      <button class="tab"        onclick="filterFeed('resource', this)"role="tab">Resources</button>
+    </div>
+  </header>
+
+  <main id="feed"></main>
+
+  <script>
+    // ── Campaign data (mock — will be replaced by live API) ──────────────────
+    const campaigns = [
+      {
+        type: 'urgent',
+        date: 'Mar 21',
+        title: 'Oppose the Gender Registry — call your rep today',
+        body: 'A bill requiring registration of transgender individuals has advanced to committee. Your call in the next 48 hours could make the difference.',
+        cta: 'Get the script'
+      },
+      {
+        type: 'action',
+        date: 'Mar 20',
+        title: 'Sign the letter to HHS on healthcare access',
+        body: 'We\'re collecting signatures from healthcare providers and advocates ahead of the April comment deadline.',
+        cta: 'Add your name'
+      },
+      {
+        type: 'update',
+        date: 'Mar 18',
+        title: 'Court ruling update: preliminary injunction granted',
+        body: 'A federal judge has issued a preliminary injunction blocking enforcement of the bathroom restriction law in three states.',
+        cta: 'Read the analysis'
+      },
+      {
+        type: 'action',
+        date: 'Mar 15',
+        title: 'Testify at your state legislature this month',
+        body: 'Several states are holding public hearings on trans healthcare bills. Find your hearing date and sign up to testify.',
+        cta: 'Find your hearing'
+      },
+      {
+        type: 'resource',
+        date: 'Mar 12',
+        title: 'New clinical evidence brief on gender-affirming care',
+        body: 'Our research team has published a summary of the latest peer-reviewed literature for advocates and healthcare providers.',
+        cta: 'Download the brief'
+      },
+      {
+        type: 'update',
+        date: 'Mar 10',
+        title: 'Federal policy tracker — March 2026',
+        body: 'A roundup of executive orders, agency rules, and court cases affecting transgender rights at the federal level.',
+        cta: 'View the tracker'
+      },
+      {
+        type: 'urgent',
+        date: 'Mar 8',
+        title: 'Emergency support fund — applications open',
+        body: 'In response to rising displacement, our emergency fund is accepting applications from trans individuals in crisis.',
+        cta: 'Apply or donate'
+      }
+    ];
+
+    // ── Badge config ─────────────────────────────────────────────────────────
+    const badgeClass = {
+      urgent:   'badge-urgent',
+      action:   'badge-action',
+      update:   'badge-update',
+      resource: 'badge-resource'
+    };
+    const badgeLabel = {
+      urgent:   'Urgent',
+      action:   'Take action',
+      update:   'Update',
+      resource: 'Resource'
+    };
+
+    // ── Render ────────────────────────────────────────────────────────────────
+    let currentFilter = 'all';
+
+    function filterFeed(type, btn) {
+      currentFilter = type;
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+      renderFeed();
+    }
+
+    function renderFeed() {
+      const feed = document.getElementById('feed');
+      const items = currentFilter === 'all'
+        ? campaigns
+        : campaigns.filter(c => c.type === currentFilter);
+
+      if (!items.length) {
+        feed.innerHTML = '<p class="empty">Nothing here yet — check back soon.</p>';
+        return;
+      }
+
+      feed.innerHTML = items.map(item => `
+        <article class="card">
+          <div class="card-meta">
+            <span class="badge ${badgeClass[item.type]}">${badgeLabel[item.type]}</span>
+            <span class="date">${item.date}</span>
+          </div>
+          <h2 class="card-title">${item.title}</h2>
+          <p class="card-body">${item.body}</p>
+          <a class="card-cta" href="#">${item.cta}</a>
+        </article>
+      `).join('');
+    }
+
+    // ── Register service worker ───────────────────────────────────────────────
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js');
+    }
+
+    // ── Init ──────────────────────────────────────────────────────────────────
+    renderFeed();
+
+    // Listen for sync timestamp from service worker
+navigator.serviceWorker.addEventListener('message', event => {
+  if (event.data?.type === 'SYNC_TIMESTAMP') {
+    localStorage.setItem('lastSync', new Date().toISOString());
+  }
+});
+  </script>
+
+</body>
+</html>
