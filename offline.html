@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0f172a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="manifest" href="manifest.json" />
+  <title>You're offline — Trans Resilience</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #0f172a;
+      --surface: #1e293b;
+      --border:  #334155;
+      --accent:  #818cf8;
+      --text:    #f1f5f9;
+      --muted:   #94a3b8;
+      --urgent:  #f87171;
+      --radius:  12px;
+    }
+
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: env(safe-area-inset-top) env(safe-area-inset-right)
+               env(safe-area-inset-bottom) env(safe-area-inset-left);
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Header (matches index.html) ── */
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 20px 20px 16px;
+    }
+
+    .wordmark {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: 22px;
+      letter-spacing: -0.3px;
+      color: var(--text);
+    }
+
+    .tagline {
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    /* ── Main content ── */
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 40px 24px;
+      max-width: 500px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* Offline icon */
+    .offline-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: rgba(248,113,113,0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+      font-size: 24px;
+    }
+
+    h1 {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: 28px;
+      color: var(--text);
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+
+    .subhead {
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--muted);
+      margin-bottom: 32px;
+    }
+
+    /* ── Action cards ── */
+    .actions-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 40px;
+    }
+
+    .action-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .action-emoji {
+      font-size: 18px;
+      line-height: 1.4;
+      flex-shrink: 0;
+    }
+
+    .action-text {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text);
+    }
+
+    .action-note {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .action-link {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .action-link:hover { text-decoration: underline; }
+
+    /* ── Retry button ── */
+    .retry-btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--accent);
+      color: #0f172a;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: opacity 0.15s;
+      margin-bottom: 32px;
+    }
+    .retry-btn:hover { opacity: 0.88; }
+    .retry-btn:active { opacity: 0.75; }
+
+    /* ── Footer sync status ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 16px 24px;
+      max-width: 500px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .sync-status {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .sync-dot {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--urgent);
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <p class="wordmark">Trans Resilience</p>
+    <p class="tagline">Campaigns · Updates · Action</p>
+  </header>
+
+  <main>
+    <div class="offline-icon">📡</div>
+
+    <h1>You're offline</h1>
+    <p class="subhead">
+      The latest campaigns aren't available right now — but don't let
+      that slow down your call to action.
+    </p>
+
+    <p class="actions-label">While you're offline</p>
+
+    <div class="actions">
+
+      <div class="action-card">
+        <span class="action-emoji">📞</span>
+        <div>
+          <p class="action-text">
+            <em>(Mockup example)</em> Call your representative:
+            <strong>1-202-224-3121</strong>
+          </p>
+          <p class="action-note">U.S. Capitol switchboard — ask for your senator or rep by name</p>
+        </div>
+      </div>
+
+      <div class="action-card">
+        <span class="action-emoji">🌐</span>
+        <div>
+          <p class="action-text">Visit Trans Resilience online</p>
+          <p class="action-note">
+            <a class="action-link" href="https://transresilience.org" target="_blank">
+              transresilience.org
+            </a>
+            — full site available when connected
+          </p>
+        </div>
+      </div>
+
+      <div class="action-card">
+        <span class="action-emoji">📣</span>
+        <div>
+          <p class="action-text">Share this app</p>
+          <p class="action-note">Pass it along to someone who wants to stay engaged</p>
+        </div>
+      </div>
+
+    </div>
+
+    <button class="retry-btn" onclick="window.location.reload()">
+      Try reconnecting
+    </button>
+  </main>
+
+  <footer>
+    <p class="sync-status">
+      <span class="sync-dot"></span>
+      <span id="sync-label">Checking sync status...</span>
+    </p>
+  </footer>
+
+  <script>
+    // Read the last-synced timestamp written by the service worker
+    // localStorage is a simple key-value store built into every browser
+    const lastSync = localStorage.getItem('lastSync');
+
+    const label = document.getElementById('sync-label');
+
+    if (lastSync) {
+      const date = new Date(lastSync);
+      // toLocaleString() formats the date for the user's locale automatically
+      label.textContent = 'Last synced: ' + date.toLocaleString();
+    } else {
+      label.textContent = 'Not yet synced — connect to load your first feed';
+    }
+  </script>
+
+</body>
+</html>
